@@ -1,0 +1,3 @@
+# VGD
+
+Virtual group discussion
