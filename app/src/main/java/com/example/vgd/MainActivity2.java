@@ -34,7 +34,7 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-
+        getSupportActionBar().hide();
         sign_out = findViewById(R.id.log_out);
         nameTV = findViewById(R.id.name);
         emailTV = findViewById(R.id.email);
