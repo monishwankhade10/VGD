@@ -1,8 +1,13 @@
 package com.example.vgd;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -15,11 +20,18 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import java.util.concurrent.SynchronousQueue;
+
 public class MainActivity extends AppCompatActivity {
 
     int RC_SIGN_IN = 0;
     SignInButton signInButton;
     GoogleSignInClient mGoogleSignInClient;
+    private static final int PERMISSSION_REQ_ID =22;
+    private static final String[] REQUESTED_PERMISSON={
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +43,13 @@ public class MainActivity extends AppCompatActivity {
         catch (NullPointerException e)
         {
             startActivity(new Intent(MainActivity.this, MainActivity2.class));
+        }
+        ActivityCompat.requestPermissions(this,REQUESTED_PERMISSON,PERMISSSION_REQ_ID);
+        if(ContextCompat.checkSelfPermission(this,REQUESTED_PERMISSON[0]) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,REQUESTED_PERMISSON[1]) != PackageManager.PERMISSION_GRANTED)
+        {
+            MainActivity.this.finish();
+            System.exit(0);
         }
         //Initializing Views
         signInButton = findViewById(R.id.sign_in_button);
@@ -50,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
     }
 
     private void signIn() {
