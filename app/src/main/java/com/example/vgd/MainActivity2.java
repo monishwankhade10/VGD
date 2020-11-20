@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
+
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -29,6 +38,9 @@ public class MainActivity2 extends AppCompatActivity {
     TextView emailTV;
     TextView idTV;
     ImageView photoIV;
+
+    private String server_url = "https://monwank.000webhostapp.com/sampledb.php";
+   // private AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +52,7 @@ public class MainActivity2 extends AppCompatActivity {
         emailTV = findViewById(R.id.email);
         idTV = findViewById(R.id.id);
         photoIV = findViewById(R.id.photo);
+
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -63,6 +76,8 @@ public class MainActivity2 extends AppCompatActivity {
             emailTV.setText("Email: "+personEmail);
             idTV.setText("ID: "+personId);
             Glide.with(this).load(personPhoto).into(photoIV);
+            sendDataToServer(personId,personName,personEmail);
+
         }
 
         sign_out.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +87,7 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
     }
+
 
     private void signOut() {
         mGoogleSignInClient.signOut()
@@ -83,5 +99,39 @@ public class MainActivity2 extends AppCompatActivity {
                         finish();
                     }
                 });
+    }
+
+    private void sendDataToServer(final String id,final String name, final String email)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }
+
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity2.this,"server error",Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+
+            }
+        }){
+            @Override
+            protected HashMap<String, String> getParams() throws AuthFailureError {
+                HashMap <String,String> Params = new HashMap<String, String>();
+                Params.put("id",id);
+                Params.put("name",name);
+                Params.put("email",email);
+                return Params;
+
+            }
+        };
+        Mysingelton.getInstance(MainActivity2.this).addTorequestque(stringRequest);
+    }
+    public void joinRoom(View view)
+    {
+        startActivity(new Intent(MainActivity2.this, FrameActivity.class));
     }
 }

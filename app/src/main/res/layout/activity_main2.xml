@@ -88,7 +88,8 @@
         android:background="@drawable/custom_button"
         android:text="Join Room"
         android:textAllCaps="false"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:onClick="joinRoom"/>
 
 </RelativeLayout>
 

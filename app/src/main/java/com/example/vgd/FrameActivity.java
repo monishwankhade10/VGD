@@ -22,8 +22,8 @@ public class FrameActivity extends AppCompatActivity {
 
     public void onLocalAudioMuteClicked(View view)
     {
-        mMuted=!mMuted;
-        mRtcEngine.muteLocalAudioStream(mMuted);
+       // mMuted=!mMuted;
+      //  mRtcEngine.muteLocalAudioStream(mMuted);
     }
     public void onCallClicked(View view)
     {
